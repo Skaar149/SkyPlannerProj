@@ -1,0 +1,21 @@
+<template>    
+    <lightning-card title="Conctact Role List">
+        <lightning-layout multiple-rows="true" vertical-align="end">
+            <template if:true ={filter}>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input type="text" value={filter} onchange={handelSearchKey}> 
+                    </lightning-input>
+                </lightning-layout-item >
+            </template>
+            <lightning-layout-item size="12" padding="around-small">
+                <template if:true ={contactRoleList}>
+                    <lightning-datatable
+                    key-field="id"
+                    data={contactRoleList}
+                    columns={columns}>
+                    </lightning-datatable>
+                </template>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>
