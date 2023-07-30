@@ -1,0 +1,8 @@
+<template>
+  <template if:true={value}>
+    <template for:each={value} for:item="contactRole">
+      <span key={contactId} class="slds-badge badgeColorRed">{contactRole.Role}
+      </span>
+    </template>
+  </template>
+</template>

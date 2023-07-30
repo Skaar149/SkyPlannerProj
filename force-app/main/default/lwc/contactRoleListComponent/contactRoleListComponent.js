@@ -1,29 +1,51 @@
-import { LightningElement, track, wire, api} from 'lwc';
-import getAllContactRole from "@salesforce/apex/contactRoleService.getcontactRole";
+import { LightningElement, track, api } from "lwc";
+import getcontactRoleListString from "@salesforce/apex/contactRoleService.getcontactRoleListString";
 
 export default class ContactRoleListComponent extends LightningElement {
-    @track filter = '';
-    @api recordId;
-    errorMessage; 
-    @track contactRoleList; 
-    columns = [
-        { label: 'Name', fieldName: 'Name' },
-        { label: 'Phone', fieldName: 'Phone', type: 'phone' },
-        { label: 'Email', fieldName: 'Email', type: 'email' }
-    ];      
+  @track filter = "";
+  @api recordId;
+  errorMessage;
+  @track contactRoleList;
+  @track contactRoleListJson;
+  @track allcontactRoleListJson;
+  columns = [
+    { label: "Name", fieldName: "contactName" },
+    { label: "Phone", fieldName: "contactPhone", type: "phone" },
+    { label: "Email", fieldName: "contactEmail", type: "email" },
+    { label: "Roles", fieldName: "contactRoles", type:"contactRoleListType"}
+  ];
 
-    handelSearchKey(event){
-        this.filter = event.target.value;
-    }
+  connectedCallback() {   
+    getcontactRoleListString({ AccId: this.recordId, Filter: this.filter })
+      .then((result) => {
+        console.log("entro getcontactRoleListString ");
+        console.log("getcontactRoleListString " + JSON.stringify(result));
+        this.contactRoleListJson =  JSON.parse(result[0]);
+        console.log(
+          "this.contactRoleListJson " +
+          JSON.stringify(this.contactRoleListJson)
+        );
+        console.log(
+          "this.contactRoleListJson [0].contactName " +
+            JSON.stringify(
+              this.contactRoleListJson.contactName
+            )
+        );
+        console.log('antes del foreach ' );
+        this.contactRoleList = [];
+        result.forEach(contactRole =>{
+          this.contactRoleList.push(JSON.parse(contactRole))
+          console.log('foreach element ' + JSON.stringify(JSON.parse(contactRole)))
+      });
+      })
+      .catch((error) => {
+        this.errorMessage = error;
+        this.contactRoleListJson = undefined;
+      });
+  }
 
-    @wire(getAllContactRole , {RecordId: this.recordId , Filter : '$filter'})    
-    getcontactRoleList({ error, data }) {
-        if (data) {  
-            this.contactRoleList = data;     
-        } else if (error) {
-            this.contactRoleList = data;   
-            this.errorMessage = error.body.message;
-        }
-    }
-
+  handelSearchKey(event) {
+    this.filter = event.target.value;
+    this.connectedCallback();
+  }
 }
