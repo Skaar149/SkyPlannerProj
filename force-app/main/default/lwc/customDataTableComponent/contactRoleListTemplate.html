@@ -1,7 +1,7 @@
 <template>
   <template if:true={value}>
     <template for:each={value} for:item="contactRole">
-      <span key={contactId} class="slds-badge badgeColorRed">{contactRole.Role}
+      <span key={contactId} class="slds-badge" style={contactRole.Color}>{contactRole.Role}
       </span>
     </template>
   </template>

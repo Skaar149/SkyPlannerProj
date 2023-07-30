@@ -1,21 +1,30 @@
 public with sharing class contactRoleService {
+  
   public class ConctacRolDto {
+    @AuraEnabled
     public Id contactId;
+    @AuraEnabled
     public String contactName;
+    @AuraEnabled
     public String contactPhone;
+    @AuraEnabled
     public String contactEmail;
+    @AuraEnabled
     public List<RoleDto> contactRoles;
   }
 
   public class RoleDto {
+    @AuraEnabled
     public Id contactId;
+    @AuraEnabled
     public String Role;
+    @AuraEnabled
     public String Color;
   }
 
 
   @AuraEnabled(cacheable=true)
-  public static List<String> getcontactRoleListString(Id AccId, String Filter) {
+  public static List<ConctacRolDto> getcontactRoleListString(Id AccId, String Filter) {
     System.debug('AccId > ' + AccId);
     System.debug('Filter > ' + Filter);
     Filter = '%' + Filter + '%';
@@ -42,7 +51,7 @@ public with sharing class contactRoleService {
         RoleDto roleDto = new RoleDto();
         roleDto.contactId = cr.Contact__r.Id;
         roleDto.Role = cr.Roles__r.Name;
-        roleDto.Color = cr.Roles__r.Color__c;
+        roleDto.Color = 'background-color: ' + cr.Roles__r.Color__c;
         dto.contactRoles.add(roleDto);
       } else {
         ConctacRolDto dto = new ConctacRolDto();
@@ -54,7 +63,7 @@ public with sharing class contactRoleService {
         RoleDto roleDto = new RoleDto();
         roleDto.contactId = cr.Contact__r.Id;
         roleDto.Role = cr.Roles__r.Name;
-        roleDto.Color = cr.Roles__r.Color__c;
+        roleDto.Color = 'background-color: ' + cr.Roles__r.Color__c;
         dto.contactRoles = new List<RoleDto>{ roleDto };
         contactRoles.put(cr.Contact__r.Id, dto);
       }
@@ -72,14 +81,10 @@ public with sharing class contactRoleService {
         contactRoles.put(c.Id, dto);
       }
     }
-    List<String> resultStringList = new List<String>();
-    for (String contactId : contactRoles.keySet()) {
-      String contacIdJson = JSON.serialize(contactRoles.get(contactId));
-      resultStringList.add(contacIdJson);
-    }
-    System.debug('resultStringList' + ' - ' + resultStringList);
+    List<ConctacRolDto> resultList= contactRoles.values();
+    System.debug('resultStringList' + ' - ' + resultList);
 
-    return resultStringList;
+    return resultList;
   }
 
   public static List<Contact> getContactbyAccount(Id AccId, String Filter) {
