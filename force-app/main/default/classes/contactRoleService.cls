@@ -4,7 +4,13 @@ public with sharing class contactRoleService {
     public String contactName;
     public String contactPhone;
     public String contactEmail;
-    public List<String> contactRoles;
+    public List<RoleDto> contactRoles;
+  }
+
+  public class RoleDto {
+    public Id contactId;
+    public String Role;
+    public String Color;
   }
 
 
@@ -21,7 +27,8 @@ public with sharing class contactRoleService {
         Contact__r.Phone,
         Contact__r.Email,
         Contact__r.AccountId,
-        Roles__r.Name
+        Roles__r.Name,
+        Roles__r.Color__c
       FROM Contact_Rol__c
       WHERE
         Contact__r.AccountId = :AccId
@@ -31,14 +38,24 @@ public with sharing class contactRoleService {
     ]) {
       if (contactRoles.containsKey(cr.Contact__r.Id)) {
         ConctacRolDto dto = contactRoles.get(cr.Contact__r.Id);
-        dto.contactRoles.add(cr.Roles__r.Name);
+        //create role dto
+        RoleDto roleDto = new RoleDto();
+        roleDto.contactId = cr.Contact__r.Id;
+        roleDto.Role = cr.Roles__r.Name;
+        roleDto.Color = cr.Roles__r.Color__c;
+        dto.contactRoles.add(roleDto);
       } else {
         ConctacRolDto dto = new ConctacRolDto();
         dto.contactId = cr.Contact__r.Id;
         dto.contactName = cr.Contact__r.Name;
         dto.contactPhone = cr.Contact__r.Phone;
         dto.contactEmail = cr.Contact__r.Email;
-        dto.contactRoles = new List<String>{ cr.Roles__r.Name };
+        //create role dto
+        RoleDto roleDto = new RoleDto();
+        roleDto.contactId = cr.Contact__r.Id;
+        roleDto.Role = cr.Roles__r.Name;
+        roleDto.Color = cr.Roles__r.Color__c;
+        dto.contactRoles = new List<RoleDto>{ roleDto };
         contactRoles.put(cr.Contact__r.Id, dto);
       }
     }
@@ -51,7 +68,7 @@ public with sharing class contactRoleService {
         dto.contactName = c.Name;
         dto.contactPhone = c.Phone;
         dto.contactEmail = c.Email;
-        dto.contactRoles = new List<String>();
+        dto.contactRoles = new List<RoleDto>();
         contactRoles.put(c.Id, dto);
       }
     }
