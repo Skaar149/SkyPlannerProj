@@ -23,7 +23,7 @@ public with sharing class contactRoleService {
   }
 
 
-  @AuraEnabled(cacheable=true)
+  @AuraEnabled(cacheable=false)
   public static List<ConctacRolDto> getcontactRoleListString(Id AccId, String Filter) {
     System.debug('AccId > ' + AccId);
     System.debug('Filter > ' + Filter);

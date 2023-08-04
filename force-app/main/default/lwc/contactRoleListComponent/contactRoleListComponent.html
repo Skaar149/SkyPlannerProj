@@ -9,13 +9,41 @@
         >
         </lightning-input>
       </lightning-layout-item>
-      <lightning-layout-item size="12" padding="around-small">      
+      <lightning-layout-item
+        size="8"
+        padding="around-small"
+        class="slds-text-align_right"
+      >
+        <lightning-button
+          variant="neutral"
+          label={editRolesButtonLabel}
+          icon-name={editRolesIconName}
+          onclick={handleEditRolesClick}
+        >
+        </lightning-button>
+      </lightning-layout-item>
+      <lightning-layout-item size="12" padding="around-small">
         <c-custom-data-table-component
           key-field="contactId"
           data={contactRoleList}
           columns={columns}
+          hide-checkbox-column="true"
+          onrowaction={callRowAction}
         ></c-custom-data-table-component>
       </lightning-layout-item>
     </lightning-layout>
+    <c-edit-roles-modal-component
+      show-modal={ModalShow}
+      contact-id={ContactId}
+      contact-name={ContactName}
+      contact-roles={ContactRoles}
+      onpositive={closeModalAndRefresh}
+      onnegative={closeModal}
+      onclose={closeModal}
+    ></c-edit-roles-modal-component>
+    <template if:true={isLoading}>
+      <lightning-spinner alternative-text="Loading..." variant="brand">
+      </lightning-spinner>
+    </template>
   </lightning-card>
 </template>
