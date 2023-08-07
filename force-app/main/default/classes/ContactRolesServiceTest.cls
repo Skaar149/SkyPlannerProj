@@ -61,7 +61,6 @@ private with sharing class ContactRolesServiceTest {
   @isTest
   private static void GetcontactRolesList_AccIdNotNull() {
     Account testAccount = [SELECT Id, Name FROM Account LIMIT 1];
-    System.debug('GetcontactRolesList_AccIdNotNull testAcc: ' + testAccount.Id);
     List<ContactRolesService.ConctacRolDto> testContactRoles = ContactRolesService.getcontactRolesList(
       testAccount.Id,
       ''

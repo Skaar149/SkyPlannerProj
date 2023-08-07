@@ -102,7 +102,6 @@ export default class ContactRoleListComponent extends LightningElement {
   }
 
   closeModalAndRefresh() {
-    console.log("closeModalAndRefresh");
     this.ModalShow = false;
     this.onInit();
   }

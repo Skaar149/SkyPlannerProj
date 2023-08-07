@@ -81,8 +81,6 @@ public with sharing class ContactRolesService {
       }
     }
     List<ConctacRolDto> resultList= contactRoles.values();
-    System.debug('resultStringList' + ' - ' + resultList);
-
     return resultList;
   }
 
