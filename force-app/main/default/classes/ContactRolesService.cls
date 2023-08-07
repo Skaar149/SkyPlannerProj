@@ -1,4 +1,4 @@
-public with sharing class contactRoleService {
+public with sharing class ContactRolesService {
   
   public class ConctacRolDto {
     @AuraEnabled
@@ -24,9 +24,7 @@ public with sharing class contactRoleService {
 
 
   @AuraEnabled(cacheable=false)
-  public static List<ConctacRolDto> getcontactRoleListString(Id AccId, String Filter) {
-    System.debug('AccId > ' + AccId);
-    System.debug('Filter > ' + Filter);
+  public static List<ConctacRolDto> getcontactRolesList(Id AccId, String Filter) {
     Filter = '%' + Filter + '%';
     Map<Id, ConctacRolDto> contactRoles = new Map<Id, ConctacRolDto>();
     for (Contact_Rol__c cr : [
@@ -44,6 +42,7 @@ public with sharing class contactRoleService {
         AND (Contact__r.Name LIKE :Filter
         OR Contact__r.Email LIKE :Filter
         OR Contact__r.Phone LIKE :Filter)
+        ORDER BY Roles__r.Name
     ]) {
       if (contactRoles.containsKey(cr.Contact__r.Id)) {
         ConctacRolDto dto = contactRoles.get(cr.Contact__r.Id);

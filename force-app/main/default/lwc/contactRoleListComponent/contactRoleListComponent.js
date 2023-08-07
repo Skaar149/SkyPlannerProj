@@ -1,5 +1,5 @@
 import { LightningElement, track, api } from "lwc";
-import getcontactRoleListString from "@salesforce/apex/contactRoleService.getcontactRoleListString";
+import getcontactRolesList from "@salesforce/apex/ContactRolesService.getcontactRolesList";
 
 const cols = [
   { label: "Name", fieldName: "contactName" },
@@ -41,7 +41,7 @@ export default class ContactRoleListComponent extends LightningElement {
 
   onInit() {
     this.isLoading = true;
-    getcontactRoleListString({ AccId: this.recordId, Filter: this.filter })
+    getcontactRolesList({ AccId: this.recordId, Filter: this.filter })
       .then((result) => {
         this.contactRoleList = result;
         this.isLoading = false;
