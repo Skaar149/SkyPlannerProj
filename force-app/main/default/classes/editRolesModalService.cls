@@ -15,6 +15,7 @@ public with sharing class editRolesModalService {
     for (Roles__c role : [
       SELECT Id, Name
       FROM Roles__c
+      WITH SECURITY_ENFORCED
     ]) {
       result.add(new dualListElementDto(role.Name, role.Id));
     }
@@ -28,6 +29,7 @@ public with sharing class editRolesModalService {
       SELECT Contact__r.Id, Roles__r.Name, Roles__r.Id
       FROM Contact_Rol__c
       WHERE Contact__r.Id = :contactId
+      WITH SECURITY_ENFORCED
     ]) {
       result.add(cr.Roles__r.Id);
     }
@@ -62,6 +64,7 @@ public with sharing class editRolesModalService {
         SELECT Id, Contact__r.Id, Roles__r.Id
         FROM Contact_Rol__c
         WHERE Contact__r.Id = :contactId AND Roles__r.Id IN :toRemoveRoles
+        WITH SECURITY_ENFORCED
       ];
       delete rolesToRemove;
       upsert toInsertRoles;

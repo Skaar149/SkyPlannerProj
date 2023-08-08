@@ -25,7 +25,7 @@ public with sharing class ContactRolesService {
 
   @AuraEnabled(cacheable=false)
   public static List<ConctacRolDto> getcontactRolesList(Id AccId, String Filter) {
-    Filter = '%' + Filter + '%';
+    Filter = '%' +  String.escapeSingleQuotes(Filter) + '%';
     Map<Id, ConctacRolDto> contactRoles = new Map<Id, ConctacRolDto>();
     for (Contact_Rol__c cr : [
       SELECT
@@ -42,6 +42,7 @@ public with sharing class ContactRolesService {
         AND (Contact__r.Name LIKE :Filter
         OR Contact__r.Email LIKE :Filter
         OR Contact__r.Phone LIKE :Filter)
+        WITH SECURITY_ENFORCED
         ORDER BY Roles__r.Name
     ]) {
       if (contactRoles.containsKey(cr.Contact__r.Id)) {
@@ -93,6 +94,7 @@ public with sharing class ContactRolesService {
         AND (Name LIKE :Filter
         OR Email LIKE :Filter
         OR Phone LIKE :Filter)
+        WITH SECURITY_ENFORCED
     ];
   }
 }

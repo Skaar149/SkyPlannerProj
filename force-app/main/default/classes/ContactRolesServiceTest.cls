@@ -47,10 +47,13 @@ private with sharing class ContactRolesServiceTest {
 
   @isTest
   private static void GetcontactRolesList_AccIdNull() {
+    Test.startTest();
     List<ContactRolesService.ConctacRolDto> testContactRoles = ContactRolesService.getcontactRolesList(
       null,
       'testFilter'
     );
+    Test.stopTest();
+
     System.assertEquals(
       true,
       testContactRoles.isEmpty(),
@@ -61,10 +64,14 @@ private with sharing class ContactRolesServiceTest {
   @isTest
   private static void GetcontactRolesList_AccIdNotNull() {
     Account testAccount = [SELECT Id, Name FROM Account LIMIT 1];
+
+    Test.startTest();
     List<ContactRolesService.ConctacRolDto> testContactRoles = ContactRolesService.getcontactRolesList(
       testAccount.Id,
       ''
     );
+    Test.stopTest();
+
     System.assertEquals(
       true,
       !testContactRoles.isEmpty(),
@@ -76,11 +83,15 @@ private with sharing class ContactRolesServiceTest {
   private static void GetcontactRolesList_FilterNull() {
     Account testAccount = [SELECT Id, Name FROM Account LIMIT 1];
     Integer testContactCount = [SELECT Id FROM Contact].size();
+
+    Test.startTest();
     Integer testContactRolesCount = ContactRolesService.getcontactRolesList(
         testAccount.Id,
         ''
       )
       .size();
+    Test.stopTest();
+
     System.assertEquals(
       testContactCount,
       testContactRolesCount,
@@ -93,11 +104,15 @@ private with sharing class ContactRolesServiceTest {
     Account testAccount = [SELECT Id, Name FROM Account LIMIT 1];
     Contact c = [SELECT Id, Name FROM Contact LIMIT 1];
     String filter = c.Name;
+
+    Test.startTest();
     Integer testContactRolesCount = ContactRolesService.getcontactRolesList(
         testAccount.Id,
         filter
       )
       .size();
+    Test.stopTest();
+
     System.assertEquals(
       1,
       testContactRolesCount,

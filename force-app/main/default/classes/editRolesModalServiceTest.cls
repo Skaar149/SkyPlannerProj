@@ -44,20 +44,31 @@ public with sharing class editRolesModalServiceTest {
     @isTest
     private static void getAllRoleList_Test(){
         Integer rolesCount =  [SELECT Id FROM Roles__c].size();
+
+        Test.startTest();
         Integer getAllRoleListCount= editRolesModalService.getAllRoleList().size();
+        Test.stopTest();
+
         System.assertEquals(rolesCount, getAllRoleListCount, 'The number of list items returned must be equal to the number of existing Roles.');
     }
 
     @isTest
     private static void getRoleByContact_IdNull(){
+        Test.startTest();
         Boolean getRoleByContactIsEmpty= editRolesModalService.getRoleByContact(null).isEmpty();
+        Test.stopTest();
+
         System.assertEquals(true, getRoleByContactIsEmpty, 'The returned list must be empty if the contact Id is null.');
     }
 
     @isTest
     private static void getRoleByContact_IdNotNull(){
         Contact c = [SELECT Id FROM Contact LIMIT 1];
+
+        Test.startTest();
         Boolean getRoleByContactIsNotEmpty= !editRolesModalService.getRoleByContact(c.Id).isEmpty();
+        Test.stopTest();
+
         System.assertEquals(true, getRoleByContactIsNotEmpty, 'The returned list must not be empty if the contact Id is valid.');
     }
 
@@ -69,7 +80,11 @@ public with sharing class editRolesModalServiceTest {
             rolesIdInitial.Add(role.Id);
         }
         Contact c = [SELECT Id FROM Contact LIMIT 1];
+
+        Test.startTest();
         String response = editRolesModalService.updateRoleByContact(c.Id, rolesIdInitial, new List<Id>());
+        Test.stopTest();
+
         System.assertEquals('OK', response, 'The response returned must be "OK" when the method parameters are valid.');
     }
 
@@ -81,7 +96,11 @@ public with sharing class editRolesModalServiceTest {
             rolesIdFinal.Add(role.Id);
         }
         Contact c = [SELECT Id FROM Contact LIMIT 1];
+
+        Test.startTest();
         String response = editRolesModalService.updateRoleByContact(c.Id, new List<Id>(), rolesIdFinal);
+        Test.stopTest();
+
         System.assertEquals('OK', response, 'The response returned must be "OK" when the method parameters are valid.');
     }
 }
