@@ -1,4 +1,4 @@
-public with sharing class editRolesModalService {
+public with sharing class ContactRolesModalService {
   public class dualListElementDto {
     @AuraEnabled
     public String label;

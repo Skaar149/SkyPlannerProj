@@ -1,4 +1,5 @@
 import { LightningElement, track, api } from "lwc";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getcontactRolesList from "@salesforce/apex/ContactRolesService.getcontactRolesList";
 
 const cols = [
@@ -21,7 +22,6 @@ const cols = [
 export default class ContactRoleListComponent extends LightningElement {
   @track filter = "";
   @api recordId;
-  errorMessage;
   @track contactRoleList;
   editRolesIconName = "utility:preview";
   editRolesButtonLabel = "Edit Roles";
@@ -35,6 +35,9 @@ export default class ContactRoleListComponent extends LightningElement {
   ContactName = "";
   ContactRoles = [];
 
+  //createRoleModal
+  showCreateRoleModal = false;
+
   connectedCallback() {
     this.onInit();
   }
@@ -47,8 +50,11 @@ export default class ContactRoleListComponent extends LightningElement {
         this.isLoading = false;
       })
       .catch((error) => {
-        this.errorMessage = error;
-        this.contactRoleListJson = undefined;
+        const toastTitle = "Unexpected Error";
+        const msg = "Method getcontactRolesList throw Exception: " + error;
+        const variant = "error";
+        this.saveSpinner = false;
+        this.showNotification(toastTitle, msg, variant);
         this.isLoading = false;
       });
     //Check for state of the dynamic column Add | Remove
@@ -74,7 +80,7 @@ export default class ContactRoleListComponent extends LightningElement {
       this.editRolesButtonLabel = "Hide Edit Roles";
     } else {
       this.editRolesIconName = "utility:preview";
-      this.editRolesButtonLabel = "Edit Roles";
+      this.editRolesButtonLabel = "Edit Contact Roles";
     }
 
     if (!this.editRolesColumnVisible) {
@@ -104,5 +110,22 @@ export default class ContactRoleListComponent extends LightningElement {
   closeModalAndRefresh() {
     this.ModalShow = false;
     this.onInit();
+  }
+
+  handleCreateRoleClick() {
+    this.showCreateRoleModal = !this.showCreateRoleModal;
+  }
+  
+  closeCreateRoleModal(){
+    this.showCreateRoleModal = false;
+  }
+
+  showNotification(toastTittle, msg, toastVariant) {
+    const evt = new ShowToastEvent({
+      title: toastTittle,
+      message: msg,
+      variant: toastVariant
+    });
+    this.dispatchEvent(evt);
   }
 }

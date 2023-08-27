@@ -1,5 +1,5 @@
 @isTest
-public with sharing class editRolesModalServiceTest {
+public with sharing class ContactRolesModalServiceTest {
     @testSetup
     static void setup() {
       // Create Account
@@ -46,7 +46,7 @@ public with sharing class editRolesModalServiceTest {
         Integer rolesCount =  [SELECT Id FROM Roles__c].size();
 
         Test.startTest();
-        Integer getAllRoleListCount= editRolesModalService.getAllRoleList().size();
+        Integer getAllRoleListCount= ContactRolesModalService.getAllRoleList().size();
         Test.stopTest();
 
         System.assertEquals(rolesCount, getAllRoleListCount, 'The number of list items returned must be equal to the number of existing Roles.');
@@ -55,7 +55,7 @@ public with sharing class editRolesModalServiceTest {
     @isTest
     private static void getRoleByContact_IdNull(){
         Test.startTest();
-        Boolean getRoleByContactIsEmpty= editRolesModalService.getRoleByContact(null).isEmpty();
+        Boolean getRoleByContactIsEmpty= ContactRolesModalService.getRoleByContact(null).isEmpty();
         Test.stopTest();
 
         System.assertEquals(true, getRoleByContactIsEmpty, 'The returned list must be empty if the contact Id is null.');
@@ -66,7 +66,7 @@ public with sharing class editRolesModalServiceTest {
         Contact c = [SELECT Id FROM Contact LIMIT 1];
 
         Test.startTest();
-        Boolean getRoleByContactIsNotEmpty= !editRolesModalService.getRoleByContact(c.Id).isEmpty();
+        Boolean getRoleByContactIsNotEmpty= !ContactRolesModalService.getRoleByContact(c.Id).isEmpty();
         Test.stopTest();
 
         System.assertEquals(true, getRoleByContactIsNotEmpty, 'The returned list must not be empty if the contact Id is valid.');
@@ -82,7 +82,7 @@ public with sharing class editRolesModalServiceTest {
         Contact c = [SELECT Id FROM Contact LIMIT 1];
 
         Test.startTest();
-        String response = editRolesModalService.updateRoleByContact(c.Id, rolesIdInitial, new List<Id>());
+        String response = ContactRolesModalService.updateRoleByContact(c.Id, rolesIdInitial, new List<Id>());
         Test.stopTest();
 
         System.assertEquals('OK', response, 'The response returned must be "OK" when the method parameters are valid.');
@@ -98,7 +98,7 @@ public with sharing class editRolesModalServiceTest {
         Contact c = [SELECT Id FROM Contact LIMIT 1];
 
         Test.startTest();
-        String response = editRolesModalService.updateRoleByContact(c.Id, new List<Id>(), rolesIdFinal);
+        String response = ContactRolesModalService.updateRoleByContact(c.Id, new List<Id>(), rolesIdFinal);
         Test.stopTest();
 
         System.assertEquals('OK', response, 'The response returned must be "OK" when the method parameters are valid.');

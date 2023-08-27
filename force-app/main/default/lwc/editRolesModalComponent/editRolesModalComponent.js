@@ -1,8 +1,8 @@
 import { LightningElement, api, track } from "lwc";
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import getAllRoleList from "@salesforce/apex/editRolesModalService.getAllRoleList";
-import getRoleByContact from "@salesforce/apex/editRolesModalService.getRoleByContact";
-import updateRoleByContact from "@salesforce/apex/editRolesModalService.updateRoleByContact";
+import getAllRoleList from "@salesforce/apex/ContactRolesModalService.getAllRoleList";
+import getRoleByContact from "@salesforce/apex/ContactRolesModalService.getRoleByContact";
+import updateRoleByContact from "@salesforce/apex/ContactRolesModalService.updateRoleByContact";
 
 export default class EditRolesModalComponent extends LightningElement {
   @api showModal;
@@ -13,12 +13,8 @@ export default class EditRolesModalComponent extends LightningElement {
   @track values = [];
   initialValues = [];
   finalValues = [];
-  errorMessage = undefined;
   updateRolesResult = "";
   cId = "";
-  toastTitle = 'Edit Roles';
-  toastMessage = '';
-  toastVariant = '';
   @track saveSpinner = false;
 
   @api handleOnInitModal(cId) {
@@ -30,8 +26,11 @@ export default class EditRolesModalComponent extends LightningElement {
         this.options = result;
       })
       .catch((error) => {
-        this.errorMessage = error;
-        this.contactRoleListJson = undefined;
+        const toastTitle  = 'Unexpected Error';
+        const msg = 'Method getAllRoleList throw Exception: '+ error;
+        const variant = 'error';
+        this.saveSpinner = false;
+        this.showNotification(toastTitle, msg, variant);
       });
 
     //getRoleByContact
@@ -39,12 +38,15 @@ export default class EditRolesModalComponent extends LightningElement {
       .then((result) => {
         this.values = result;
         this.initialValues = result;
+        this.finalValues = result;
         this.saveSpinner = false;
       })
       .catch((error) => {
-        this.errorMessage = error;
-        this.contactRoleListJson = undefined;
+        const toastTitle  = 'Unexpected Error';
+        const msg = 'Method getRoleByContact throw Exception: '+ error;
+        const variant = 'error';
         this.saveSpinner = false;
+        this.showNotification(toastTitle, msg, variant);
       });
   }
 
@@ -59,17 +61,17 @@ export default class EditRolesModalComponent extends LightningElement {
         initialRoles: this.initialValues,
         finalRoles: this.finalValues
       }).then((result) => {
-        this.toastTitle = 'Edit Roles';
+       const toastTitle = 'Edit Roles';
         if (result === "OK") {
           this.dispatchEvent(new CustomEvent("positive"));
-          this.toastMessage = 'The roles were successfully edited for the Contact: '+ this.contactName;    
-          this.toastVariant = 'success';          
-          this.showNotification();
+          const msg = 'The roles were successfully edited for the Contact: '+ this.contactName;    
+          const variant = 'success';          
+          this.showNotification(toastTitle, msg, variant);
         } else {
           this.dispatchEvent(new CustomEvent("negative"));
-          this.toastMessage = 'Roles not successfully edited for Contact: '+ this.contactName + '. Error message: ' + result;    
-          this.toastVariant = 'error';  
-          this.showNotification();
+          const msg = 'Roles not successfully edited for Contact: '+ this.contactName + '. Error message: ' + result;    
+          const variant = 'error';  
+          this.showNotification(toastTitle, msg, variant);
         }
         this.saveSpinner = false;
       });
@@ -95,11 +97,11 @@ export default class EditRolesModalComponent extends LightningElement {
     this.finalValues = selectedOptionsList;
   }
 
-  showNotification() {
+  showNotification(toastTittle, msg, toastVariant) {
     const evt = new ShowToastEvent({
-        title: this.toastTitle,
-        message: this.toastMessage,
-        variant: this.toastVariant,
+        title: toastTittle,
+        message: msg,
+        variant: toastVariant,
     });
     this.dispatchEvent(evt);
 }

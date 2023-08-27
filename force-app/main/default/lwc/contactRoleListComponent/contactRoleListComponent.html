@@ -32,7 +32,21 @@
           </lightning-input>
         </lightning-layout-item>
         <lightning-layout-item
-          size="8"
+          size="6"
+          padding="around-small"
+          class="slds-text-align_right"
+        >
+          <lightning-button
+          variant="neutral"
+          label="Create Role"
+          onclick={handleCreateRoleClick}
+        >
+        </lightning-button> 
+
+
+        </lightning-layout-item>
+        <lightning-layout-item
+          size="2"
           padding="around-small"
           class="slds-text-align_right"
         >
@@ -64,7 +78,14 @@
         onpositive={closeModalAndRefresh}
         onnegative={closeModal}
         onclose={closeModal}
+        column-widths-mode="auto"
       ></c-edit-roles-modal-component>
+
+      <c-roles-creation-modal
+        show-create-role-modal={showCreateRoleModal}
+        onpositive={closeModalAndRefresh}
+        onclosecreaterole={closeCreateRoleModal}
+      ></c-roles-creation-modal>
     </div>
 
     <template if:true={isLoading}>

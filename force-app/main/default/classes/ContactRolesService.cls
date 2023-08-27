@@ -35,7 +35,7 @@ public with sharing class ContactRolesService {
         Contact__r.Email,
         Contact__r.AccountId,
         Roles__r.Name,
-        Roles__r.Color__c
+        Roles__r.Style__c
       FROM Contact_Rol__c
       WHERE
         Contact__r.AccountId = :AccId
@@ -51,7 +51,7 @@ public with sharing class ContactRolesService {
         RoleDto roleDto = new RoleDto();
         roleDto.contactId = cr.Contact__r.Id;
         roleDto.Role = cr.Roles__r.Name;
-        roleDto.Color = 'background-color: ' + cr.Roles__r.Color__c;
+        roleDto.Color = cr.Roles__r.Style__c;
         dto.contactRoles.add(roleDto);
       } else {
         ConctacRolDto dto = new ConctacRolDto();
@@ -63,7 +63,7 @@ public with sharing class ContactRolesService {
         RoleDto roleDto = new RoleDto();
         roleDto.contactId = cr.Contact__r.Id;
         roleDto.Role = cr.Roles__r.Name;
-        roleDto.Color = 'background-color: ' + cr.Roles__r.Color__c;
+        roleDto.Color = cr.Roles__r.Style__c;
         dto.contactRoles = new List<RoleDto>{ roleDto };
         contactRoles.put(cr.Contact__r.Id, dto);
       }
